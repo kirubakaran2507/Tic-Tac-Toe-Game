@@ -1,0 +1,55 @@
+import java.util.Scanner;
+
+public class Game implements TikTakToeGame {
+    private static Game game;
+    private final Board board;
+    private final Player player1;
+    private final Player player2;
+    private final Scanner scanner;
+
+    private Game(){
+        scanner = new Scanner(System.in);
+        board = new Board(3,3);
+        board.initializeBoard();
+        player1 = new Player("prem",'X');
+        player2 = new Player("karan",'O');
+    }
+
+    public static Game getInstance(){
+        if (game==null){
+            game = new Game();
+        }
+        return game;
+    }
+
+
+    @Override
+    public void playGame() {
+        board.displayBoard();
+        Player currPlayer = player1;
+        boolean gameWon = false;
+
+        while (!gameWon){
+            System.out.println("Player "+ currPlayer.getName()+"'s turn");
+            int row = scanner.nextInt();
+            int col = scanner.nextInt();
+
+            if (!board.isAvailable(row,col)){
+                System.out.println("Invalid position or already filled");
+                continue;
+            }
+
+            board.placePlayer(currPlayer,row,col);
+            board.displayBoard();
+            if (board.checkWins(currPlayer)){
+                System.out.println("Player "+ currPlayer.getName()+" won");
+                gameWon = true;
+            }
+            if (board.checkDraw()){
+                System.out.println("Match drawn");
+                gameWon = true;
+            }
+            currPlayer = (currPlayer.equals(player1) ? player2 : player1);
+        }
+    }
+}

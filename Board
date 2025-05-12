@@ -1,0 +1,55 @@
+public class Board {
+    private final int ROWS;
+    private final int COLS;
+    char[][] board;
+    int cellsFilled;
+
+    public Board(int ROWS,int COLS){
+        this.ROWS = ROWS;
+        this.COLS = COLS;
+        board = new char[this.ROWS][this.COLS];
+    }
+
+    public void initializeBoard(){
+        for (int i=0;i<ROWS;i++){
+            for (int j=0;j<COLS;j++){
+                board[i][j] = ' ';
+            }
+        }
+    }
+
+    public void placePlayer(Player player,int row,int col){
+        board[row][col] = player.getSymbol();
+        cellsFilled++;
+    }
+
+    public boolean checkWins(Player player){
+        char symbol = player.getSymbol();
+        for (int row=0;row<ROWS;row++){
+            if (board[row][0]==symbol && board[row][1]==symbol && board[row][2]==symbol) return true;
+        }
+
+        for (int col=0;col<COLS;col++){
+            if (board[0][col]==symbol && board[1][col]==symbol && board[2][col]==symbol) return true;
+        }
+
+        if (board[0][0]==symbol && board[1][1]==symbol && board[2][2]==symbol)   return true;
+        return board[0][2] == symbol &&  board[1][1]==symbol && board[2][0]==symbol;
+    }
+
+    public void displayBoard(){
+        for (int i=0;i<ROWS;i++){
+            for (int j=0;j<COLS;j++){
+                System.out.print("|"+board[i][j]);
+            }
+            System.out.println("|");
+        }
+    }
+    public boolean checkDraw(){
+        return (cellsFilled==9);
+    }
+
+    public boolean isAvailable(int row,int col){
+        return row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == ' ';
+    }
+}
